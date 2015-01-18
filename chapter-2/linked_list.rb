@@ -3,11 +3,67 @@ require 'pry'
 class LinkedList
   def initialize(node_values=[])
     @head = Node.new(node_values[0])
+    @length = 1
     current_node = @head
 
     node_values[1..(node_values.length-1)].each do |node_value|
       current_node.next = Node.new(node_value)
       current_node = current_node.next
+      increment_length
+    end
+  end
+
+  def [](index)
+    current_node = @head
+
+    while index > 0
+      current_node = current_node.next
+      index -= 1
+    end
+
+    current_node.value
+  end
+
+  def delete(value)
+    if @head.value == value
+      @head = @head.next
+      decrement_length
+      return true
+    end
+
+    current_node = @head
+    while current_node.next != nil
+      if current_node.next.value == value
+        current_node.next = current_node.next.next
+        decrement_length
+        return true
+      end
+
+      current_node = current_node.next
+    end
+
+    return false
+  end
+
+  def delete_at(n)
+    return false if n >= @length
+
+    if n == 0
+      @head = @head.next
+      return 
+    end
+
+    node = @head
+    until n == 1
+      node = node.next
+      n -= 1
+    end
+
+    if node.next && node.next.next
+      node.next.value = nil
+      node.next = node.next.next
+    else
+      node.next = nil
     end
   end
 
@@ -18,7 +74,40 @@ class LinkedList
     end
 
     new_node = Node.new(value)
+    increment_length
     node.next = new_node
+  end
+
+  def delete_nth_from_last(n)
+    index_to_delete = @length - n
+    return false if index_to_delete < 0
+
+    delete_at(index_to_delete)
+  end
+
+  def remove_dupes
+    value_count = {}
+
+    node = @head
+
+    while node.next
+      if value_count[node.value]
+        value_count[node.value] += 1
+      else
+        value_count[node.value] = 1
+      end
+
+      node = node.next
+    end
+
+    value_count.each do |value, count|
+      if count > 1
+        while count > 1
+          self.delete(value)
+          count -= 1
+        end
+      end
+    end
   end
 
   def add_to_head(value)
@@ -32,6 +121,8 @@ class LinkedList
     array = []
     current_node = @head
 
+    return array unless current_node
+
     until current_node.next == nil
       array << current_node.value
       current_node = current_node.next
@@ -39,13 +130,24 @@ class LinkedList
 
     array << current_node.value
   end
-end
 
-class Node
-  def initialize(value)
-    @value = value
-    @next = nil
+  private
+
+  def increment_length
+    @length += 1
   end
 
-  attr_accessor :next, :value
+  def decrement_length
+    @length -= 1
+  end
+
+  class Node
+    def initialize(value)
+      @value = value
+      @next = nil
+    end
+
+    attr_accessor :next, :value
+  end
 end
+
