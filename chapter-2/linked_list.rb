@@ -28,7 +28,7 @@ class LinkedList
     if @head.value == value
       @head = @head.next
       decrement_length
-      return true
+      return value
     end
 
     current_node = @head
@@ -36,21 +36,22 @@ class LinkedList
       if current_node.next.value == value
         current_node.next = current_node.next.next
         decrement_length
-        return true
+        return value
       end
 
       current_node = current_node.next
     end
 
-    return false
+    return nil
   end
 
   def delete_at(n)
     return false if n >= @length
 
     if n == 0
+      tmp = @head
       @head = @head.next
-      return 
+      return tmp
     end
 
     node = @head
@@ -61,7 +62,9 @@ class LinkedList
 
     if node.next && node.next.next
       node.next.value = nil
+      value = node.next.value
       node.next = node.next.next
+      return value
     else
       node.next = nil
     end
@@ -100,12 +103,9 @@ class LinkedList
       node = node.next
     end
 
-    value_count.each do |value, count|
-      if count > 1
-        while count > 1
-          self.delete(value)
-          count -= 1
-        end
+    value_count.select{|key, value| value > 1}.each do |key, value|
+      (value - 1).times do
+        self.delete(key)
       end
     end
   end
