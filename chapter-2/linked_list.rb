@@ -24,6 +24,23 @@ class LinkedList
     current_node.value
   end
 
+  def beginning_of_cycle_in_list
+    node = @head
+
+    visited_nodes = {node => 1}
+
+    while node.next
+      node = node.next
+      if visited_nodes[node]
+        return node
+      else
+        visted_nodes[node] = 1
+      end
+    end
+
+    return nil
+  end
+
   def delete(value)
     if @head.value == value
       @head = @head.next
