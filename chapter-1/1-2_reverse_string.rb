@@ -29,3 +29,13 @@ def c_style_reverse_in_place(array_of_chars)
   array_of_chars
 end
 
+def recursive_reverse(string)
+  if string.length == 1
+    return string
+  else
+    string[string.length-1] + recursive_reverse(string[0..string.length-2]) 
+  end
+end
+
+puts recursive_reverse("hello")
+

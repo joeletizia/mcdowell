@@ -13,3 +13,10 @@ describe "c_style_reverse_in_place" do
     expect(c_style_reverse_in_place("abcde#".split(""))).to eq("edcba#".split(""))
   end
 end
+
+describe "recursive_reverse" do
+  it "reverses the string" do
+    expect(recursive_reverse("hello")).to eq("olleh")
+    expect(recursive_reverse("joeletizia")).to eq("aiziteleoj")
+  end
+end
