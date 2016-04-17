@@ -1,21 +1,16 @@
 require 'spec_helper'
 require_relative '../../chapter-4/tree'
 
-describe Tree do
-  subject(:tree) { Tree.new }
+describe BinaryTreeNode do
+  subject(:tree) { BinaryTreeNode.new }
 
-  describe "#root" do
-    context "when the tree has no nodes" do
-      it "returns null" do
-        expect(subject.root).to eq(nil)
-      end
-    end
+  describe "#delete_from_tree" do
+    it "deletes the node from the tree" do
+      array = (1..10).to_a
+      tree = tree_from_array(array)
 
-    context "when the tree has nodes" do
-      it "returns the root node" do
-        subject.insert(4)
-        expect(subject.root.value).to eq(4)
-      end
+      delete_from_tree(tree, 4)
+      expect(tree.in_order_traverse).to_not include(4)
     end
   end
 end

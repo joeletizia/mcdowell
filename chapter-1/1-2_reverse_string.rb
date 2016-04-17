@@ -37,5 +37,3 @@ def recursive_reverse(string)
   end
 end
 
-puts recursive_reverse("hello")
-

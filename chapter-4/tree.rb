@@ -60,6 +60,30 @@ def tree_from_array(array, parent = nil)
   root
 end
 
+def delete_from_tree(root, val)
+  while root && root.value != val
+    if root.value > val
+      root = root.left
+    else
+      root = root.right
+    end
+  end
+
+  if root
+    successor = right_most_child(root.left)
+    if successor
+      root.value = successor.value
+      delete_from_tree(root.left, val) if root.value
+    else
+      if root.parent.left == root
+        root.parent.left = nil
+      else
+        root.parent.right = nil
+      end
+    end
+  end
+end
+
 def in_order_successor(node)
   if node.right
     return left_most_child(node.right)
@@ -76,8 +100,16 @@ def in_order_successor(node)
   return p.value || nil
 end
 
+def right_most_child(node)
+  while node && node.right
+    node = node.right
+  end
+
+  node
+end
+
 def left_most_child(node)
-  while node.left
+  while node && node.left
     node = node.left
   end
 
@@ -98,4 +130,14 @@ end
 
 def covers?(value, tree)
   tree.in_order_traverse.include?(value)
+end
+
+def equal_trees?(tree_1, tree_2)
+  return true if tree_1.nil? && tree_2.nil?
+  return false if tree_1.nil? || tree_2.nil?
+  return false unless tree_1.value == tree_2.value
+  return false unless equal_trees?(tree_1.left, tree_2.left)
+  return false unless equal_trees?(tree_1.right, tree_2.right)
+
+  true
 end

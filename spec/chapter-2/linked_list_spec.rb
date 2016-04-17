@@ -20,6 +20,15 @@ describe LinkedList do
     end
   end
 
+  describe "#partition" do
+    it "orders the nodes around k" do
+      arr = (1..10).to_a.shuffle
+      list = LinkedList.new(arr)
+      result = list.partition(5)
+      expect(result.to_a.sort).to eq((1..10).to_a)
+    end
+  end
+
   describe "#delete_at" do
     context "when the given index is out of bounds" do
       it "returns false" do

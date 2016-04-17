@@ -2,21 +2,26 @@ require 'pry'
 
 class LinkedList
   def initialize(node_values=[])
-    @head = Node.new(node_values[0])
-    @length = 1
-    current_node = @head
+    unless node_values.empty?
+      @head = Node.new(node_values[0])
+      @length = 1
+      current_node = @head
 
-    node_values[1..(node_values.length-1)].each do |node_value|
-      current_node.next = Node.new(node_value)
-      current_node = current_node.next
-      increment_length
+      node_values[1..(node_values.length-1)].each do |node_value|
+        current_node.next = Node.new(node_value)
+        current_node = current_node.next
+        increment_length
+      end
+    else
+      @head = nil
+      @length = 0
     end
   end
 
   def [](index)
     current_node = @head
 
-    while index > 0
+    while current_node && index > 0
       current_node = current_node.next
       index -= 1
     end
@@ -130,8 +135,31 @@ class LinkedList
   def add_to_head(value)
     new_head = Node.new(value)
 
-    new_head.next = @head.dup
-    @head = new_head
+    if @head
+      new_head.next = @head.dup
+      @head = new_head
+    else
+      @head = new_head
+    end
+  end
+
+  def partition(k)
+    greater_list = LinkedList.new
+    less_list = LinkedList.new
+
+    node = @head
+
+    while node
+      if node.value < k
+        less_list.add_to_head(node.value)
+      else
+        greater_list.add_to_head(node.value)
+      end
+      node = node.next
+    end
+
+    array = less_list.to_a + greater_list.to_a
+    LinkedList.new(array)
   end
 
   def to_a
